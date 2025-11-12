@@ -27,9 +27,9 @@ define('BASE_PATH', dirname(dirname(__FILE__)));
 
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'reserbot');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_NAME', 'i45com_reserbot');
+define('DB_USER', 'i45com_reserbot');
+define('DB_PASS', 'Danjohn007!');
 define('DB_CHARSET', 'utf8mb4');
 
 // Application Settings
