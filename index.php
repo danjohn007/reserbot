@@ -37,6 +37,11 @@ function getUrl() {
     if (strpos($uri, '?') !== false) {
         $uri = strstr($uri, '?', true);
     }
+    // Strip the base path (e.g., /reserbot/4) from the URI
+    $basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'] ?? '');
+    if (!empty($basePath) && strpos($uri, $basePath) === 0) {
+        $uri = substr($uri, strlen($basePath));
+    }
     return trim($uri, '/');
 }
 
