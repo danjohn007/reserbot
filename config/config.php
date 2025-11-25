@@ -27,8 +27,8 @@ define('BASE_PATH', dirname(dirname(__FILE__)));
 
 // Database Configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'recaudab_reserbot');
-define('DB_USER', 'recaudab_reserbot');
+define('DB_NAME', 'janetzy_reserbot');
+define('DB_USER', 'janetzy_reserbot');
 define('DB_PASS', 'Danjohn007!');
 define('DB_CHARSET', 'utf8mb4');
 
