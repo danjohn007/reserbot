@@ -131,7 +131,7 @@ class AdminController extends BaseController {
         $this->requireRole(ROLE_SUPERADMIN);
         
         $sql = "SELECT * FROM configuraciones ORDER BY categoria, clave";
-        $configuraciones = $this->db->fetchAll($sql);
+        $configuraciones = $this->getDb()->fetchAll($sql);
         
         // Group by category
         $grouped = [];
@@ -176,7 +176,7 @@ class AdminController extends BaseController {
         
         try {
             $sql = "UPDATE configuraciones SET valor = ? WHERE clave = ?";
-            $this->db->query($sql, [$valor, $clave]);
+            $this->getDb()->query($sql, [$valor, $clave]);
             
             $this->logSecurityEvent('config_actualizada', "Configuración actualizada: $clave", $_SESSION['user_id']);
             $this->json(['success' => true, 'message' => 'Configuración guardada']);
@@ -202,10 +202,10 @@ class AdminController extends BaseController {
                 ORDER BY l.fecha_hora DESC
                 LIMIT ? OFFSET ?";
         
-        $logs = $this->db->fetchAll($sql, [$perPage, $offset]);
+        $logs = $this->getDb()->fetchAll($sql, [$perPage, $offset]);
         
         // Get total count
-        $totalResult = $this->db->fetch("SELECT COUNT(*) as total FROM logs_seguridad");
+        $totalResult = $this->getDb()->fetch("SELECT COUNT(*) as total FROM logs_seguridad");
         $total = $totalResult['total'];
         $totalPages = ceil($total / $perPage);
         

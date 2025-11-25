@@ -5,10 +5,21 @@
  */
 
 class BaseController {
-    protected $db;
+    protected $db = null;
     
     public function __construct() {
-        $this->db = Database::getInstance();
+        // Database connection is now lazy-loaded
+        // This allows views to render even when DB is unavailable
+    }
+    
+    /**
+     * Get database instance (lazy loading)
+     */
+    protected function getDb() {
+        if ($this->db === null) {
+            $this->db = Database::getInstance();
+        }
+        return $this->db;
     }
     
     /**
@@ -139,7 +150,7 @@ class BaseController {
         try {
             $sql = "INSERT INTO logs_seguridad (usuario_id, tipo, descripcion, ip, user_agent) 
                     VALUES (?, ?, ?, ?, ?)";
-            $this->db->query($sql, [
+            $this->getDb()->query($sql, [
                 $usuarioId,
                 $tipo,
                 $descripcion,

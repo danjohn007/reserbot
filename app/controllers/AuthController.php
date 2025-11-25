@@ -4,11 +4,21 @@
  */
 
 class AuthController extends BaseController {
-    private $usuarioModel;
+    private $usuarioModel = null;
     
     public function __construct() {
         parent::__construct();
-        $this->usuarioModel = new Usuario();
+        // Model initialization is now lazy to allow pages to render without DB
+    }
+    
+    /**
+     * Get Usuario model (lazy loading)
+     */
+    private function getUsuarioModel() {
+        if ($this->usuarioModel === null) {
+            $this->usuarioModel = new Usuario();
+        }
+        return $this->usuarioModel;
     }
     
     /**
@@ -51,7 +61,7 @@ class AuthController extends BaseController {
         }
         
         // Find user
-        $user = $this->usuarioModel->findByEmail($email);
+        $user = $this->getUsuarioModel()->findByEmail($email);
         
         if (!$user) {
             $this->logSecurityEvent('failed_login', "Intento de login con email inexistente: $email");
@@ -60,20 +70,20 @@ class AuthController extends BaseController {
         }
         
         // Check if account is blocked
-        if ($this->usuarioModel->isBlocked($user['id'])) {
+        if ($this->getUsuarioModel()->isBlocked($user['id'])) {
             $this->logSecurityEvent('failed_login', "Intento de login en cuenta bloqueada", $user['id']);
             $this->setFlash('error', 'Su cuenta está temporalmente bloqueada. Intente más tarde.');
             $this->redirect('auth/login');
         }
         
         // Verify password
-        if (!$this->usuarioModel->verifyPassword($password, $user['password'])) {
+        if (!$this->getUsuarioModel()->verifyPassword($password, $user['password'])) {
             // Increment login attempts
-            $this->usuarioModel->incrementLoginAttempts($user['id']);
+            $this->getUsuarioModel()->incrementLoginAttempts($user['id']);
             
             // Check if should block account
             if ($user['intentos_login'] + 1 >= MAX_LOGIN_ATTEMPTS) {
-                $this->usuarioModel->blockAccount($user['id'], LOGIN_TIMEOUT / 60);
+                $this->getUsuarioModel()->blockAccount($user['id'], LOGIN_TIMEOUT / 60);
                 $this->logSecurityEvent('account_blocked', "Cuenta bloqueada por múltiples intentos fallidos", $user['id']);
                 $this->setFlash('error', 'Cuenta bloqueada por múltiples intentos fallidos');
             } else {
@@ -93,8 +103,8 @@ class AuthController extends BaseController {
         }
         
         // Successful login
-        $this->usuarioModel->resetLoginAttempts($user['id']);
-        $this->usuarioModel->updateLastConnection($user['id']);
+        $this->getUsuarioModel()->resetLoginAttempts($user['id']);
+        $this->getUsuarioModel()->updateLastConnection($user['id']);
         
         // Set session
         $_SESSION['user_id'] = $user['id'];
@@ -169,14 +179,14 @@ class AuthController extends BaseController {
         }
         
         // Check if email already exists
-        if ($this->usuarioModel->findByEmail($email)) {
+        if ($this->getUsuarioModel()->findByEmail($email)) {
             $this->setFlash('error', 'Este email ya está registrado');
             $this->redirect('auth/register');
         }
         
         // Create user
         try {
-            $userId = $this->usuarioModel->create([
+            $userId = $this->getUsuarioModel()->create([
                 'nombre' => $nombre,
                 'apellido' => $apellido,
                 'email' => $email,
