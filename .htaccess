@@ -4,13 +4,13 @@ RewriteEngine On
 # Base directory detection
 RewriteBase /
 
+# Security - Prevent access to config and logs directories
+RewriteRule ^(config|logs)($|/) - [F,L]
+
 # Redirect to index.php if not a file or directory
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
-
-# Security - Prevent access to config and logs
-RewriteRule ^(config|logs) - [F,L]
 
 # PHP Settings
 php_flag display_errors Off
