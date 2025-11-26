@@ -1,0 +1,11 @@
+# Enable URL Rewriting for the auth directory
+RewriteEngine On
+
+# Redirect /auth/login to /auth/login.php
+RewriteRule ^login$ login.php [L]
+
+# Redirect /auth/register to /auth/register.php
+RewriteRule ^register$ register.php [L]
+
+# Redirect /auth/logout to /auth/logout.php
+RewriteRule ^logout$ logout.php [L]
