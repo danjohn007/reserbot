@@ -5,6 +5,8 @@
  * ensuring the route works even without mod_rewrite
  */
 
-// Include the front controller with the auth/logout route
-$_GET['url'] = 'auth/logout';
+// Define the route before including the front controller
+// This is a hardcoded, safe value - not user input
+define('RESERBOT_ROUTE', 'auth/logout');
+$_GET['url'] = RESERBOT_ROUTE;
 require_once dirname(__DIR__) . '/index.php';
