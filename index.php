@@ -59,6 +59,7 @@ $params = array_slice($url, 2);
 $controllerFile = CONTROLLERS_PATH . $controllerName . '.php';
 if (!file_exists($controllerFile)) {
     $controllerName = 'HomeController';
+    $controllerFile = CONTROLLERS_PATH . $controllerName . '.php';
     $method = 'notFound';
     $params = [];
 }
