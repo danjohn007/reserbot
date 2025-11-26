@@ -14,10 +14,23 @@ date_default_timezone_set('America/Mexico_City');
 
 // Auto-detect base URL
 function detectBaseUrl() {
-    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-    $host = $_SERVER['HTTP_HOST'];
-    $script = $_SERVER['SCRIPT_NAME'];
-    $path = str_replace('/index.php', '', $script);
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443)) ? "https://" : "http://";
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    
+    // Get the document root and script filename to calculate the relative path
+    $documentRoot = isset($_SERVER['DOCUMENT_ROOT']) ? realpath($_SERVER['DOCUMENT_ROOT']) : false;
+    $basePath = realpath(__DIR__ . '/..');
+    
+    // Calculate the path relative to document root
+    if (is_string($documentRoot) && is_string($basePath) && strpos($basePath, $documentRoot) === 0) {
+        $path = substr($basePath, strlen($documentRoot));
+    } else {
+        // Fallback: use SCRIPT_NAME but handle subdirectory files properly
+        $script = $_SERVER['SCRIPT_NAME'] ?? '';
+        // Remove known script file patterns
+        $path = preg_replace('#/(index\.php|auth/[^/]+\.php)$#', '', $script);
+    }
+    
     return $protocol . $host . $path;
 }
 
