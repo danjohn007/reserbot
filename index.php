@@ -29,7 +29,20 @@ spl_autoload_register(function ($class) {
 
 // Helper function to get URL parameter
 function getUrl() {
-    return isset($_GET['url']) ? rtrim($_GET['url'], '/') : '';
+    if (isset($_GET['url'])) {
+        return rtrim($_GET['url'], '/');
+    }
+    // Fallback: parse from REQUEST_URI (for PHP built-in server or servers without .htaccess)
+    $uri = $_SERVER['REQUEST_URI'] ?? '';
+    if (strpos($uri, '?') !== false) {
+        $uri = strstr($uri, '?', true);
+    }
+    // Strip the base path (e.g., /reserbot/4) from the URI
+    $basePath = str_replace('/index.php', '', $_SERVER['SCRIPT_NAME'] ?? '');
+    if (!empty($basePath) && strpos($uri, $basePath) === 0) {
+        $uri = substr($uri, strlen($basePath));
+    }
+    return trim($uri, '/');
 }
 
 // Parse URL
