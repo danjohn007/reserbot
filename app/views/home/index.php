@@ -1,4 +1,11 @@
-<?php require_once VIEWS_PATH . 'layouts/header.php'; ?>
+<?php
+// Prevent direct access to this file
+if (!defined('VIEWS_PATH')) {
+    http_response_code(403);
+    die('Forbidden: Direct access not allowed.');
+}
+require_once VIEWS_PATH . 'layouts/header.php';
+?>
 
 <!-- Hero Section -->
 <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg shadow-xl p-12 mb-12">

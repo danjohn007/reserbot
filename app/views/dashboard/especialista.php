@@ -1,4 +1,11 @@
-<?php require_once VIEWS_PATH . 'layouts/header.php'; ?>
+<?php
+// Prevent direct access to this file
+if (!defined('VIEWS_PATH')) {
+    http_response_code(403);
+    die('Forbidden: Direct access not allowed.');
+}
+require_once VIEWS_PATH . 'layouts/header.php';
+?>
 
 <div class="mb-6">
     <h1 class="text-3xl font-bold text-gray-800">

@@ -4,8 +4,8 @@ RewriteEngine On
 # Base directory detection
 RewriteBase /
 
-# Security - Prevent access to config and logs directories
-RewriteRule ^(config|logs)($|/) - [F,L]
+# Security - Prevent access to config, logs, and app directories
+RewriteRule ^(config|logs|app)($|/) - [F,L]
 
 # Redirect to index.php if not a file or directory
 RewriteCond %{REQUEST_FILENAME} !-f

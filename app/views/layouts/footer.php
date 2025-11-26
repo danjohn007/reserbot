@@ -1,3 +1,10 @@
+<?php
+// Prevent direct access to this file
+if (!defined('VIEWS_PATH')) {
+    http_response_code(403);
+    die('Forbidden: Direct access not allowed.');
+}
+?>
     </main>
     
     <!-- Footer -->

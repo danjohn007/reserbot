@@ -1,4 +1,11 @@
-<?php require_once VIEWS_PATH . 'layouts/header.php'; ?>
+<?php
+// Prevent direct access to this file
+if (!defined('VIEWS_PATH')) {
+    http_response_code(403);
+    die('Forbidden: Direct access not allowed.');
+}
+require_once VIEWS_PATH . 'layouts/header.php';
+?>
 
 <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
